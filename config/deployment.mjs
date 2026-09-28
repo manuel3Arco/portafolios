@@ -1,6 +1,6 @@
 /** Único punto de configuración de GitHub Pages. Ver README.md. */
 export const deployment = {
-  githubUsername: 'TU_USUARIO',
+  githubUsername: 'manuel3Arco',
   // null => <usuario>.github.io. Para un repositorio de proyecto: 'portfolio'.
   repository: null,
 };

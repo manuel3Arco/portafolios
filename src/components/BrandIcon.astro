@@ -1,0 +1,7 @@
+---
+import { assetUrl } from '../lib/urls';
+
+interface Props { name: 'gmail' | 'github' | 'linkedin' }
+const { name } = Astro.props;
+---
+<img class:list={['brand-logo', `brand-logo--${name}`]} src={assetUrl(`icons/${name}.svg`)} alt="" width="20" height="20" aria-hidden="true" />

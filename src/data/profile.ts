@@ -43,7 +43,7 @@ export const profile: Profile = {
   role: 'Desarrollador web',
   location: 'Sevilla, España',
   email: 'manarclop11@gmail.com',
-  linkedin: null,
+  linkedin: 'https://www.linkedin.com/in/manuarco',
   photo: null,
   cv: null,
   introduction: 'Desarrollo, mantenimiento y mejora continua de aplicaciones web. Del código a una experiencia que funciona.',

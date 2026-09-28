@@ -183,3 +183,5 @@ Usuario de GitHub, URL real de LinkedIn, fotografía opcional, CV público autor
 ## Licencia
 
 No se ha añadido una licencia de reutilización del código. La elección queda pendiente del propietario. Las dependencias conservan sus licencias propias. Las licencias OFL de las fuentes Manrope y JetBrains Mono también se distribuyen en `public/fonts/`; no constituyen una licencia del código del portafolio.
+
+Los logotipos de Gmail, GitHub y LinkedIn se sirven localmente desde `public/icons/`. Proceden de la colección [SVG Logos](https://github.com/gilbarbara/logos) y sus marcas pertenecen a sus respectivos titulares.

@@ -1,0 +1,8 @@
+---
+import { profile } from '../data/profile';
+import SectionTitle from './SectionTitle.astro';
+---
+<section id="experiencia" class="section-grid" aria-labelledby="experience-title" tabindex="-1">
+  <SectionTitle number="03" title="Experiencia" subtitle="Mi recorrido profesional." id="experience-title" />
+  <ol class="timeline">{profile.experience.map((job) => <li class:list={['timeline-item', { featured: job.featured }]}><article class="experience-card"><div class="job-period"><span>{job.start} — {job.end}</span><span>{job.location}</span></div><h3>{job.role}</h3><p class="company">{job.company}</p>{job.project && <p class="project-context">{job.project}</p>}<ul class="responsibilities">{job.responsibilities.map((item) => <li>{item}</li>)}</ul><ul class="tags" aria-label="Tecnologías utilizadas">{job.technologies.map((item) => <li>{item}</li>)}</ul></article></li>)}</ol>
+</section>

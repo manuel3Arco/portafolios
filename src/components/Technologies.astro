@@ -1,0 +1,9 @@
+---
+import { profile } from '../data/profile';
+import SectionTitle from './SectionTitle.astro';
+import Icon from './Icon.astro';
+---
+<section id="tecnologias" class="section-grid" aria-labelledby="technologies-title" tabindex="-1">
+  <SectionTitle number="02" title="Tecnologías" subtitle="Las herramientas con las que trabajo." id="technologies-title" />
+  <div class="skills-grid">{profile.skills.map((group) => <article class="skill-card"><Icon name={group.icon} size={23} /><h3>{group.title}</h3><ul class="tags">{group.items.map((item) => <li>{item}</li>)}</ul></article>)}</div>
+</section>

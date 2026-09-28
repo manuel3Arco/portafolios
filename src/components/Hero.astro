@@ -1,0 +1,28 @@
+---
+import { profile } from '../data/profile';
+import { publicAsset } from '../lib/assets';
+import Icon from './Icon.astro';
+const photo = profile.photo ? publicAsset(profile.photo.path) : null;
+const cv = profile.cv?.publicAuthorized ? publicAsset(profile.cv.path, true) : null;
+---
+<section class:list={['hero', { 'hero--with-photo': photo }]} aria-labelledby="hero-title">
+  <div class="hero-main">
+    <p class="eyebrow"><span class="small-line" aria-hidden="true"></span> {profile.role}</p>
+    <h1 id="hero-title">{profile.firstName}<br /><span>{profile.surnames}</span><span class="name-dot">.</span></h1>
+    <p class="hero-stack" aria-label={profile.headline}>{profile.primaryTechnologies.map((technology, index) => <><span>{technology}</span>{index < profile.primaryTechnologies.length - 1 && <span class="stack-divider" aria-hidden="true">/</span>}</>)}</p>
+    <p class="hero-intro">{profile.introduction}</p>
+    <div class="hero-actions">
+      <a class="button button-primary" href="#experiencia">Ver experiencia <Icon name="down" size={18} /></a>
+      <a class="button button-secondary" href="#contacto">Contactar <Icon name="arrow" size={18} /></a>
+      {cv && <a class="button button-secondary" href={cv} download>Descargar CV <Icon name="download" size={18} /></a>}
+    </div>
+    <p class="hero-location"><Icon name="pin" size={17} />{profile.location}</p>
+  </div>
+  {photo && profile.photo && <div class="identity-card">
+    <div class="identity-top"><span class="mono">&lt;dev /&gt;</span><span class="identity-caption">PORTAFOLIO PERSONAL</span></div>
+    <img class="profile-photo" src={photo} alt={profile.photo.alt} width={profile.photo.width} height={profile.photo.height} fetchpriority="high" />
+    <div class="identity-bottom"><span>{profile.role}</span><Icon name="code" size={22} /></div>
+    <div class="identity-tags" aria-hidden="true">{profile.primaryTechnologies.map((item) => <span>{item}</span>)}</div>
+  </div>}
+</section>
+<div class="hero-rule"><span class="mono">CÓDIGO. COLABORACIÓN. MEJORA CONTINUA.</span><a href="#sobre-mi" aria-label="Conoce más sobre mí"><Icon name="down" size={18} /></a></div>

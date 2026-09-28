@@ -1,0 +1,8 @@
+---
+import { projects } from '../data/projects';
+import { publicAsset } from '../lib/assets';
+import { externalUrl } from '../lib/urls';
+import SectionTitle from './SectionTitle.astro';
+import Icon from './Icon.astro';
+---
+{projects.length > 0 && <section id="proyectos" class="section-grid" aria-labelledby="projects-title" tabindex="-1"><SectionTitle number="05" title="Proyectos personales" id="projects-title" /><div class="projects-grid">{projects.map((project) => <article class="project-card" id={`proyecto-${project.id}`}>{project.image && <img src={publicAsset(project.image.path)} alt={project.image.alt} width={project.image.width} height={project.image.height} loading="lazy" />}{project.status && <p class="project-context">{project.status}</p>}<h3>{project.title}</h3><p>{project.description}</p><ul class="tags">{project.technologies.map((item) => <li>{item}</li>)}</ul><div class="project-links">{externalUrl(project.repositoryUrl) && <a href={externalUrl(project.repositoryUrl)!} target="_blank" rel="noopener noreferrer">Repositorio <Icon name="arrow" size={16} /><span class="sr-only"> (nueva pestaña)</span></a>}{externalUrl(project.demoUrl) && <a href={externalUrl(project.demoUrl)!} target="_blank" rel="noopener noreferrer">Demostración <Icon name="arrow" size={16} /><span class="sr-only"> (nueva pestaña)</span></a>}</div></article>)}</div></section>}

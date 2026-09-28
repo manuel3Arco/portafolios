@@ -1,0 +1,9 @@
+---
+import { profile } from '../data/profile';
+import SectionTitle from './SectionTitle.astro';
+import Icon from './Icon.astro';
+---
+<section id="formacion" class="section-grid" aria-labelledby="education-title" tabindex="-1">
+  <SectionTitle number="04" title="Formación" subtitle="La base de mi desarrollo." id="education-title" />
+  <ol class="education-list">{profile.education.map((study) => <li><span class="education-icon"><Icon name="education" size={22} /></span><article><p class="education-period">{study.period}</p><h3>{study.title}</h3><p class="school">{study.school} <span>· {study.location}</span></p></article></li>)}</ol>
+</section>

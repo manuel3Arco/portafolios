@@ -1,0 +1,5 @@
+---
+import { profile } from '../data/profile';
+import SocialLinks from './SocialLinks.astro';
+---
+<footer class="site-footer container"><p>© {new Date().getFullYear()} {profile.name}</p><div class="footer-links"><a href={`mailto:${profile.email}`}>Correo</a><SocialLinks /><a href="#contenido">Volver arriba <span aria-hidden="true">↑</span></a></div></footer>

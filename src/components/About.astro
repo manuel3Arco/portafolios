@@ -1,0 +1,12 @@
+---
+import { profile } from '../data/profile';
+import SectionTitle from './SectionTitle.astro';
+---
+<section id="sobre-mi" class="section-grid" aria-labelledby="about-title" tabindex="-1">
+  <SectionTitle number="01" title="Sobre mí" subtitle="Una forma práctica de construir y mejorar." id="about-title" />
+  <div class="about-content">
+    {profile.about.map((paragraph) => <p>{paragraph}</p>)}
+    <ul class="strengths" aria-label="Aptitudes">{profile.strengths.map((strength) => <li>{strength}</li>)}</ul>
+    <div class="secondary-info">{profile.languages.map((language) => <span><strong>{language.name}</strong> · {language.level}</span>)}{profile.other.map((item) => <span>{item}</span>)}</div>
+  </div>
+</section>

@@ -1,0 +1,25 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+!.env.example
+.vscode/
+.idea/
+*.code-workspace
+.DS_Store
+Thumbs.db
+*.log
+.qa/
+.tools/
+.sites-runtime/
+# Documentos privados: guarda las referencias fuera de public/.
+private/
+references/
+attachments/
+referencias/
+documentos-personales/
+*.pdf
+*.doc
+*.docx
+!public/cv/*.pdf

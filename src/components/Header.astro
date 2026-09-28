@@ -1,0 +1,91 @@
+---
+import { profile } from '../data/profile';
+import { projects } from '../data/projects';
+import { assetUrl } from '../lib/urls';
+import Icon from './Icon.astro';
+const items = [
+  { id: 'sobre-mi', label: 'Sobre mí' },
+  { id: 'tecnologias', label: 'Tecnologías' },
+  { id: 'experiencia', label: 'Experiencia' },
+  { id: 'formacion', label: 'Formación' },
+  ...(projects.length ? [{ id: 'proyectos', label: 'Proyectos' }] : []),
+  { id: 'contacto', label: 'Contacto' },
+];
+---
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href={assetUrl('')} aria-label={`${profile.name}, inicio`}>
+      <span class="brand-mark">{profile.initials}<span>.</span></span>
+      <span class="brand-caption">desarrollo web</span>
+    </a>
+    <nav id="main-navigation" class="main-navigation" aria-label="Navegación principal">
+      {items.map(({ id, label }) => <a href={`${assetUrl('')}#${id}`}>{label}</a>)}
+    </nav>
+    <div class="header-controls">
+      <button id="theme-toggle" class="icon-button" type="button" aria-label="Activar modo claro" title="Cambiar tema" hidden>
+        <Icon name="sun" class="theme-sun" /><Icon name="moon" class="theme-moon" />
+      </button>
+      <button id="menu-toggle" class="icon-button menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation" aria-label="Abrir menú" hidden>
+        <Icon name="menu" class="menu-open-icon" /><Icon name="close" class="menu-close-icon" />
+      </button>
+    </div>
+  </div>
+</header>
+<script>
+  const themeButton = document.querySelector<HTMLButtonElement>('#theme-toggle');
+  if (themeButton) {
+    const updateLabel = () => {
+      const dark = document.documentElement.dataset.theme !== 'light';
+      themeButton.setAttribute('aria-label', `Activar modo ${dark ? 'claro' : 'oscuro'}`);
+      themeButton.title = `Activar modo ${dark ? 'claro' : 'oscuro'}`;
+    };
+    themeButton.hidden = false;
+    updateLabel();
+    themeButton.addEventListener('click', () => {
+      const theme = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+      document.documentElement.dataset.theme = theme;
+      try { localStorage.setItem('portfolio-theme', theme); } catch { /* El tema sigue funcionando sin almacenamiento. */ }
+      updateLabel();
+    });
+  }
+
+  const menuButton = document.querySelector<HTMLButtonElement>('#menu-toggle');
+  const nav = document.querySelector<HTMLElement>('#main-navigation');
+  if (menuButton && nav) {
+    const mobile = matchMedia('(max-width: 800px)');
+    const setOpen = (open: boolean) => {
+      menuButton.setAttribute('aria-expanded', String(open));
+      menuButton.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+      nav.hidden = mobile.matches && !open;
+    };
+    const sync = () => {
+      menuButton.hidden = !mobile.matches;
+      if (nav.contains(document.activeElement) && mobile.matches) menuButton.focus();
+      setOpen(false);
+    };
+    menuButton.addEventListener('click', () => setOpen(menuButton.getAttribute('aria-expanded') !== 'true'));
+    nav.addEventListener('click', (event) => {
+      if (event.target instanceof HTMLAnchorElement && mobile.matches) {
+        const id = event.target.hash.slice(1);
+        setOpen(false);
+        const section = document.getElementById(id);
+        if (section) section.focus({ preventScroll: true });
+        else menuButton.focus();
+      }
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && menuButton.getAttribute('aria-expanded') === 'true') {
+        setOpen(false);
+        menuButton.focus();
+      }
+    });
+    document.addEventListener('click', (event) => {
+      if (event.target instanceof Node && !nav.contains(event.target) && !menuButton.contains(event.target)) setOpen(false);
+    });
+    document.querySelector('.site-header')?.addEventListener('focusout', (event) => {
+      if (event instanceof FocusEvent && event.relatedTarget instanceof Node && !document.querySelector('.site-header')?.contains(event.relatedTarget)) setOpen(false);
+    });
+    mobile.addEventListener('change', sync);
+    sync();
+  }
+</script>

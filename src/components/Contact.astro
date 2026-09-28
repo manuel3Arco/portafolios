@@ -1,0 +1,27 @@
+---
+import { profile } from '../data/profile';
+import { projects } from '../data/projects';
+import Icon from './Icon.astro';
+import SocialLinks from './SocialLinks.astro';
+---
+<section id="contacto" class="contact-section" aria-labelledby="contact-title" tabindex="-1">
+  <div class="contact-intro"><span class="section-number">{projects.length ? '06' : '05'} / CONTACTO</span><h2 id="contact-title">Hablemos<span>.</span></h2><p>Una conversación es un buen punto de partida.</p></div>
+  <div class="contact-details"><span class="contact-label">Puedes escribirme a</span><a class="email-link" href={`mailto:${profile.email}`}>{profile.email}<Icon name="arrow" size={24} /></a><div class="contact-links"><button id="copy-email" type="button" class="copy-button" data-email={profile.email} hidden><Icon name="copy" size={16} />Copiar correo</button><SocialLinks /></div><p id="copy-status" class="copy-status" role="status" aria-live="polite" aria-atomic="true"></p></div>
+</section>
+<script>
+  const button = document.querySelector<HTMLButtonElement>('#copy-email');
+  const status = document.querySelector<HTMLElement>('#copy-status');
+  if (button && status) {
+    button.hidden = false;
+    button.addEventListener('click', async () => {
+      const email = button.dataset.email;
+      if (!email) return;
+      try {
+        await navigator.clipboard.writeText(email);
+        status.textContent = 'Correo copiado al portapapeles.';
+      } catch {
+        status.textContent = 'No se pudo copiar. Puedes seleccionar el correo y copiarlo manualmente.';
+      }
+    });
+  }
+</script>

@@ -1,0 +1,42 @@
+---
+import { profile } from '../data/profile';
+import { assetUrl } from '../lib/urls';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+interface Props { title?: string; notFound?: boolean }
+const { title = profile.meta.title, notFound = false } = Astro.props;
+const canonical = Astro.site && !notFound ? new URL(assetUrl(''), Astro.site).href : null;
+---
+<!doctype html>
+<html lang="es" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={profile.meta.description} />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#10151d" />
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href={assetUrl('favicon.svg')} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    {(notFound || !Astro.site) && <meta name="robots" content="noindex, nofollow" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:site_name" content={profile.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={profile.meta.description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <script is:inline>
+      try {
+        const theme = localStorage.getItem('portfolio-theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch { /* El tema oscuro predeterminado no depende del almacenamiento. */ }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <Header />
+    <main id="contenido" class="container" tabindex="-1"><slot /></main>
+    <Footer />
+  </body>
+</html>

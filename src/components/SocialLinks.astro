@@ -1,0 +1,9 @@
+---
+import { profile } from '../data/profile';
+import { publication } from '../../config/deployment.mjs';
+import { externalUrl } from '../lib/urls';
+import Icon from './Icon.astro';
+const linkedin = externalUrl(profile.linkedin);
+---
+{publication.githubUrl && <a href={publication.githubUrl} target="_blank" rel="noopener noreferrer">GitHub<Icon name="arrow" size={16} /><span class="sr-only"> (nueva pestaña)</span></a>}
+{linkedin && <a href={linkedin} target="_blank" rel="noopener noreferrer">LinkedIn<Icon name="arrow" size={16} /><span class="sr-only"> (nueva pestaña)</span></a>}

@@ -2,7 +2,7 @@
 export const deployment = {
   githubUsername: 'manuel3Arco',
   // null => <usuario>.github.io. Para un repositorio de proyecto: 'portfolio'.
-  repository: null,
+  repository: 'portafolios',
 };
 
 export function resolveDeployment(config = deployment) {

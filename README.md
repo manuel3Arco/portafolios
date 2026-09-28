@@ -2,7 +2,7 @@
 
 Web estática en español, construida con Astro, TypeScript estricto y CSS. Incluye modos oscuro y claro, navegación móvil accesible, trayectoria profesional, tecnologías, formación y contacto. No utiliza backend, analítica, servicios de pago ni frameworks de interfaz. Las fuentes se sirven desde el propio sitio.
 
-**Antes de publicar:** sustituye `TU_USUARIO` en `config/deployment.mjs`. El proyecto funciona en local con ese marcador, pero omite el perfil de GitHub, la URL canónica y `og:url`, añade `noindex` y bloquea el despliegue. No se ha creado ningún repositorio ni realizado ningún push.
+**Publicación configurada:** repositorio [manuel3Arco/portafolios](https://github.com/manuel3Arco/portafolios), rama `master` y URL prevista [https://manuel3arco.github.io/portafolios/](https://manuel3arco.github.io/portafolios/). `config/deployment.mjs` es el único punto de configuración de usuario y repositorio. La activación de GitHub Pages y el envío de los cambios se realizan manualmente siguiendo los pasos de publicación de este documento.
 
 ## Desarrollo
 
@@ -13,7 +13,7 @@ npm ci
 npm run dev
 ```
 
-Abre la dirección que indique Astro, normalmente `http://localhost:4321`.
+Abre la dirección que indique Astro con la base del repositorio: normalmente `http://localhost:4321/portafolios/`, tanto para desarrollo como para preview.
 
 | Comando | Función |
 | --- | --- |
@@ -23,7 +23,7 @@ Abre la dirección que indique Astro, normalmente `http://localhost:4321`.
 | `npm run preview` | Sirve el resultado compilado. Ejecuta `build` antes. |
 | `npm run check:deploy` | Verifica que usuario y repositorio estén configurados; en Actions comprueba también el repositorio real. |
 
-El fallo de `check:deploy` mientras siga `TU_USUARIO` es intencional; no impide `dev`, `check` ni `build`.
+`check:deploy` valida la configuración y, cuando existe `GITHUB_REPOSITORY`, exige que coincida con `manuel3Arco/portafolios`. La protección frente al marcador `TU_USUARIO` se conserva para evitar publicaciones sin configurar.
 
 ## Estructura
 
@@ -70,7 +70,7 @@ No hay teléfono en los datos públicos. Guarda documentos originales y referenc
 
 ### LinkedIn
 
-`profile.linkedin` empieza como `null`. Sustitúyelo únicamente por tu URL HTTPS real y comprobada. Se mostrará en contacto y pie. Los valores vacíos o con protocolos distintos de HTTPS no se publican.
+`profile.linkedin` contiene la URL real configurada y se muestra en contacto y pie. Para actualizarla, modifica ese campo. Si se establece en `null`, se oculta; los valores vacíos o con protocolos distintos de HTTPS no se publican.
 
 ### Fotografía opcional
 
@@ -127,14 +127,25 @@ Séneca y las aplicaciones internas de las empresas son experiencia profesional,
 
 ## Publicar en GitHub Pages
 
-El workflow utiliza las acciones oficiales de GitHub y Astro. Se ejecuta con cada push a `main` y manualmente con `workflow_dispatch` en `main`; no se ejecuta desde pull requests. Usa Node.js 24, tipos y compilación antes del despliegue, permisos `contents: read`, `pages: write`, `id-token: write`, entorno `github-pages` y un grupo de concurrencia para evitar publicaciones simultáneas. No necesita tokens personales ni secretos añadidos.
+El workflow existente `.github/workflows/deploy.yml` utiliza las acciones oficiales de GitHub y Astro. Se ejecuta con cada push a `master` y permite ejecución manual con `workflow_dispatch`. La condición `github.ref == 'refs/heads/master'` impide compilar y publicar desde otra rama, incluso si se selecciona manualmente; no hay disparador de pull requests. Usa Node.js 24, tipos y compilación antes del despliegue, permisos `contents: read`, `pages: write`, `id-token: write`, entorno `github-pages` y un grupo de concurrencia para evitar publicaciones simultáneas. No necesita tokens personales ni secretos añadidos.
 
 `withastro/action@v6` instala dependencias antes de `build-cmd`. El comando configurado restaura el lockfile del commit y ejecuta `npm ci` antes de comprobar y compilar, asegurando que el artefacto utiliza exactamente las versiones registradas. Se conserva `package-lock.json` en el control de versiones.
 
-### Sitio de usuario: `<usuario>.github.io`
+### Configuración de este repositorio
 
-1. Edita `config/deployment.mjs`: sustituye `githubUsername: 'TU_USUARIO'` por tu usuario real y deja `repository: null`. Se derivan `site: 'https://<usuario>.github.io'` y `base: '/'`.
-2. Ejecuta:
+```js
+export const deployment = {
+  githubUsername: 'manuel3Arco',
+  repository: 'portafolios',
+};
+```
+
+`resolveDeployment` deriva `site: 'https://manuel3arco.github.io'` y `base: '/portafolios/'`. `astro.config.mjs` importa estos valores y conserva `output: 'static'`. No dupliques los valores en la configuración de Astro ni añadas el nombre del repositorio a `site`.
+
+### Pasos para activar la publicación
+
+1. Trabaja en el repositorio existente `manuel3Arco/portafolios` y conserva la rama `master`. Revisa tus cambios con `git status` y `git diff`.
+2. Con Node.js 24 activo, ejecuta:
 
    ```sh
    npm ci
@@ -144,29 +155,20 @@ El workflow utiliza las acciones oficiales de GitHub y Astro. Se ejecuta con cad
    npm run preview
    ```
 
-3. Crea manualmente en GitHub el repositorio público `<usuario>.github.io`. La automatización comprueba que coincide con la configuración.
-4. Revisa los archivos que vas a compartir. Si la carpeta aún no es un repositorio Git, los siguientes comandos son manuales; sustituye `<usuario>` antes de ejecutarlos:
+3. Abre `http://localhost:4321/portafolios/` para revisar el resultado compilado. El puerto puede variar si ya está ocupado; conserva siempre `/portafolios/` al final de la dirección.
+4. En el repositorio de GitHub, abre **Settings → Pages → Build and deployment → Source → GitHub Actions**.
+5. Revisa y confirma localmente los cambios que quieras publicar; después envíalos tú mismo a la rama existente con `git push origin master`. Estos pasos son manuales: preparar los archivos no realiza ningún commit ni push.
+6. El push iniciará el workflow. Para volver a ejecutarlo manualmente una vez los cambios estén en GitHub, abre **Actions → Publicar portafolio en GitHub Pages → Run workflow** y selecciona `master`.
+7. Espera a que los trabajos `build` y `deploy` terminen correctamente. Si el entorno `github-pages` requiere aprobación, revísala en la ejecución. Si existen restricciones de ramas para ese entorno, comprueba que permitan `master`.
+8. Comprueba la web en [https://manuel3arco.github.io/portafolios/](https://manuel3arco.github.io/portafolios/). Los siguientes pushes a `master` actualizarán el mismo sitio.
 
-   ```sh
-   git init -b main
-   git add .
-   git status
-   git diff --cached
-   git commit -m "Crear portafolio profesional"
-   git remote add origin https://github.com/<usuario>/<usuario>.github.io.git
-   ```
+La configuración sigue la [guía oficial de Astro para GitHub Pages](https://docs.astro.build/en/guides/deploy/github/) y la [acción oficial de Astro](https://github.com/withastro/action). La ejecución remota y el dominio público solo pueden verificarse después de enviar los cambios y activar GitHub Pages.
 
-5. En GitHub abre **Settings → Pages → Build and deployment → Source → GitHub Actions**.
-6. Ejecuta manualmente `git push -u origin main`. También puedes iniciar el workflow desde **Actions → Publicar portafolio en GitHub Pages → Run workflow**, seleccionando `main`.
-7. Espera a que termine el workflow y abre la URL que muestra el entorno `github-pages`. Los siguientes pushes a `main` actualizarán la web.
+### Rutas bajo `/portafolios/`
 
-La configuración sigue la [guía oficial de Astro para GitHub Pages](https://docs.astro.build/en/guides/deploy/github/) y la [acción oficial de Astro](https://github.com/withastro/action). El despliegue remoto solo puede comprobarse después de crear y configurar el repositorio.
+No edites las rutas en los componentes: los helpers existentes añaden la base a recursos, favicon, logotipos, fotografía y CV opcionales, navegación y retorno desde `404.html`. Guarda las rutas de recursos como `images/perfil.webp` o `cv/manuel-arco-cv.pdf`, sin añadirles `/portafolios/`, para evitar duplicarla. Los fragmentos como `#contacto` conservan la ruta actual. Los enlaces externos y `mailto:` mantienen su destino original; no reciben la base.
 
-### Repositorio de proyecto: `portfolio`
-
-En el mismo archivo, establece tu usuario real y `repository: 'portfolio'`. Se mantienen el origen `https://<usuario>.github.io` y una base `/portfolio/`. La URL pública será `https://<usuario>.github.io/portfolio/`. Crea y usa el repositorio `portfolio` en los pasos anteriores.
-
-No edites las rutas en los componentes: recursos, enlaces, favicon, fotografía, CV y metadatos se adaptan a la base. Durante desarrollo y preview, abre también `/portfolio/`. La página `404.html` se genera con enlaces que vuelven a la base configurada.
+La URL canónica y `og:url` de la página principal se generan como `https://manuel3arco.github.io/portafolios/`. El 404 no publica una URL canónica y conserva `noindex`. No se activan la fotografía ni el CV mientras sus datos sigan en `null`.
 
 ## Revisión
 
@@ -174,11 +176,11 @@ La compilación ejecuta una validación de todas las páginas HTML: recursos loc
 
 Revisa al modificar el diseño: anchuras móviles y de escritorio, ambos temas, ampliación de texto, teclado y foco, apertura/cierre del menú con Escape, copia del correo (incluido el fallo del portapapeles), y contenido sin JavaScript. Con JavaScript desactivado, la navegación queda visible y todos los datos y enlaces siguen disponibles; se ocultan solo los botones que lo necesitan.
 
-El sitio respeta `prefers-reduced-motion` y no oculta contenido con animaciones. No se ha publicado todavía. Consulta `VALIDACION.md` para los resultados ejecutados durante esta entrega.
+El sitio respeta `prefers-reduced-motion` y no oculta contenido con animaciones. Consulta `VALIDACION.md` para las comprobaciones de la implementación inicial; el estado actual de la publicación remota debe revisarse en GitHub Actions.
 
 ## Pendiente de aportar
 
-Usuario de GitHub, URL real de LinkedIn, fotografía opcional, CV público autorizado y proyectos personales reales. La web funciona sin estos recursos opcionales; el usuario de GitHub es necesario para publicar.
+Fotografía opcional, CV público autorizado y proyectos personales reales. GitHub y LinkedIn ya están configurados. La web funciona sin estos recursos opcionales.
 
 ## Licencia
 

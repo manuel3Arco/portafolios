@@ -1,0 +1,28 @@
+---
+import { assetUrl } from '../lib/urls';
+import Icon from './Icon.astro';
+
+interface Props { name: string }
+const { name } = Astro.props;
+const logos: Record<string, string> = {
+  Java: 'java',
+  Spring: 'spring',
+  JavaScript: 'javascript',
+  HTML: 'html',
+  CSS: 'css',
+  Oracle: 'oracle',
+  PHP: 'php',
+  Bootstrap: 'bootstrap',
+  Git: 'git',
+};
+const symbols: Record<string, string> = {
+  JSP: 'code',
+  'PL/SQL': 'database',
+  SQL: 'database',
+  'Entornos ágiles': 'cycle',
+};
+const logo = logos[name];
+---
+<span class="technology-visual" aria-hidden="true">
+  {logo ? <img class:list={['technology-logo', { 'technology-logo--wide': logo === 'oracle' || logo === 'php' }]} src={assetUrl(`icons/technologies/${logo}.svg`)} alt="" width={logo === 'oracle' || logo === 'php' ? 64 : 32} height="32" loading="lazy" decoding="async" /> : <Icon name={symbols[name] ?? 'code'} size={28} />}
+</span>

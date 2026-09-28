@@ -145,6 +145,12 @@ h1 > span:not(.name-dot) { color: var(--muted); }
 .skill-card { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); padding: 25px; }
 .skill-card > svg { color: var(--accent); margin-bottom: 20px; }
 .skill-card > h3 { font-size: .95rem; margin-bottom: 18px; font-weight: 650; }
+.technology-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(82px, 1fr)); gap: 10px; list-style: none; }
+.technology-list > li { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 9px; min-width: 0; padding: 13px 6px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); }
+.technology-visual { display: flex; align-items: center; justify-content: center; width: 64px; max-width: 100%; height: 38px; flex-shrink: 0; color: var(--accent); }
+.technology-logo { width: 32px; height: 32px; object-fit: contain; }
+.technology-logo--wide { width: 64px; }
+.technology-name { font-family: var(--mono); font-size: .75rem; line-height: 1.6; color: var(--text); text-align: center; overflow-wrap: anywhere; }
 .tags { display: flex; flex-wrap: wrap; gap: 7px; list-style: none; }
 .tags li { font-family: var(--mono); color: var(--muted); font-size: .75rem; line-height: 1.6; border: 1px solid var(--line); background: var(--bg); border-radius: 4px; padding: 4px 9px; }
 .timeline { list-style: none; padding-left: 24px; border-left: 1px solid var(--line); }
@@ -260,7 +266,7 @@ h1 > span:not(.name-dot) { color: var(--muted); }
   .hero-rule > span { font-size: .6rem; letter-spacing: .035em; max-width: 260px; }
   .section-heading h2 { font-size: 1.65rem; }
   .section-grid { padding-block: 45px; }
-  .skills-grid { gap: 12px; }
+  .skills-grid { grid-template-columns: 1fr; gap: 12px; }
   .skill-card { padding: 19px 15px; }
   .skill-card h3 { font-size: .875rem; line-height: 1.65; }
   .tags li { font-size: .675rem; padding-inline: 7px; }

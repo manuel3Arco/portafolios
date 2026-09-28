@@ -186,4 +186,4 @@ Fotografía opcional, CV público autorizado y proyectos personales reales. GitH
 
 No se ha añadido una licencia de reutilización del código. La elección queda pendiente del propietario. Las dependencias conservan sus licencias propias. Las licencias OFL de las fuentes Manrope y JetBrains Mono también se distribuyen en `public/fonts/`; no constituyen una licencia del código del portafolio.
 
-Los logotipos de Gmail, GitHub y LinkedIn se sirven localmente desde `public/icons/`. Proceden de la colección [SVG Logos](https://github.com/gilbarbara/logos) y sus marcas pertenecen a sus respectivos titulares.
+Los logotipos de Gmail, GitHub y LinkedIn se sirven localmente desde `public/icons/`; los de las tecnologías, desde `public/icons/technologies/`. Proceden de la colección [SVG Logos](https://github.com/gilbarbara/logos) y sus marcas pertenecen a sus respectivos titulares. JSP, SQL, PL/SQL y entornos ágiles utilizan símbolos genéricos de código, bases de datos e iteración. La correspondencia visual se mantiene en `src/components/TechnologyIcon.astro`; las competencias siguen definidas únicamente en `src/data/profile.ts`.
